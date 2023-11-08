@@ -7,6 +7,11 @@ export default defineEventHandler((event) => {
         Bucket: query.bucket as string,
     }
 
+    aws.config.update({
+        region: process.env.ENV_AWS_REGION,
+        accessKeyId: process.env.ENV_AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.ENV_AWS_SECRET_ACCESS_KEY,
+    })
     aws.config.getCredentials((err) => {
         if (err) {
             console.log(err)
