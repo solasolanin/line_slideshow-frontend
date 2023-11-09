@@ -16,7 +16,6 @@ export default defineEventHandler((event) => {
         Bucket: query.bucket as string,
         Key: query.filepath as string
     }
-    console.log(bucketParams)
 
     aws.config.update({
         region: process.env.ENV_AWS_DEFAULT_REGION,
@@ -31,13 +30,14 @@ export default defineEventHandler((event) => {
     const s3 = new aws.S3()
 
     s3.getObject(bucketParams, (err, data) => {
-        if(err){
+        if (err) {
             console.log(err)
             return
         }
         const writer = fs.createWriteStream(query.file as string)
         writer.on('finish', () => {
-            console.log('success')
+            // console.log('success')
+            return
         })
         writer.write(data.Body as Buffer)
         writer.end()
