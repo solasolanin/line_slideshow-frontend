@@ -3,6 +3,7 @@ type Photo = {
     id: string,
     file: string,
     path: string,
+    poster: string,
 }
 // const thumbUrlPrefix = process.env.THUMBNAIL_URL
 const thumbUrlPrefix = "https://dipq407x26ji4.cloudfront.net/tmb/"
@@ -24,7 +25,14 @@ const { data, refresh } = await useFetch('/api/getTableScan', {
 
 if (data.value?.Items) {
     data.value?.Items.forEach((item: any) => {
-        photoMap.value.set(item.id, { id: item.id, file: item.body.thumbnail, path: `${thumbUrlPrefix}${item.body.thumbnail}` })
+        photoMap.value.set(
+            item.id,
+            {
+                id: item.id,
+                file: item.body.thumbnail,
+                path: `${thumbUrlPrefix}${item.body.thumbnail}`,
+                poster: item.body.account_name
+            })
     })
 }
 
@@ -57,6 +65,9 @@ const showPreview = ((id: string) => {
                     <img class="thumbnail" @click="showPreview(photoArray[colCount * row - colCount + col].id)"
                         :src="photoArray[colCount * row - colCount + col].path"
                         v-if="photoArray.length !== 0 && photoArray[colCount * row - colCount + col]">
+                    <p v-if="photoArray.length !== 0 && photoArray[colCount * row - colCount + col]">
+                        {{ photoArray[colCount * row - colCount + col].poster }}
+                    </p>
                 </div>
             </div>
         </div>
