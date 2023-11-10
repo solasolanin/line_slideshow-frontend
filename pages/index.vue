@@ -12,7 +12,12 @@
     </header>
     <main>
         <div>
-            <button>フォトコン投票</button>
+
+            <NuxtLink to="/vote" class="link">
+                <button>
+                    フォトコン投票
+                </button>
+            </NuxtLink>
         </div>
         <div>
             <button class="middle">フォトコン発表</button>
@@ -23,11 +28,7 @@
     </main>
 </template>
 
-<style>
-body {
-    margin: 0;
-}
-
+<style scoped>
 header {
     position: relative;
 }
@@ -61,6 +62,12 @@ main {
     width: 100vw;
     position: fixed;
     bottom: 0;
+}
+
+
+.link {
+    text-decoration: none;
+    color: black;
 }
 
 button {
