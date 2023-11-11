@@ -1,11 +1,5 @@
 <script setup lang="ts">
-// 賞データの取得
-type prize = {
-    id: number,
-    name: string,
-    photo_id: string,
-    account_name: string,
-}
+import { type prize } from '@/types/prize'
 const prizeMap = ref(new Map<number, prize>())
 const viewPrize = ref<prize>()
 let viewPrizeId = 0

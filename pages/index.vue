@@ -2,6 +2,8 @@
 </script>
 
 <template>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <header>
         <div>
             <img src="@/assets/flower.jpg" />
@@ -16,14 +18,26 @@
             <NuxtLink to="/vote" class="link">
                 <button>
                     フォトコン投票
+                    <br />
+                    <span class="material-symbols-outlined">how_to_vote </span>
                 </button>
             </NuxtLink>
         </div>
         <div>
-            <button class="middle">フォトコン発表</button>
+            <NuxtLink to="/result" class="link">
+                <button class="middle">
+                    フォトコン発表
+                    <br />
+                    <span class="material-symbols-outlined"> trophy </span>
+                </button>
+            </NuxtLink>
         </div>
         <div>
-            <button class="right">スライドショー作成</button>
+            <button class="right">
+                スライドショー作成
+                <br />
+                <span class="material-symbols-outlined"> slideshow </span>
+            </button>
         </div>
     </main>
 </template>
@@ -87,5 +101,13 @@ button.middle {
 button.right {
     border-left: none;
     width: 34vw;
+}
+
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24
 }
 </style>
