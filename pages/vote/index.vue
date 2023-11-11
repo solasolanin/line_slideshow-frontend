@@ -1,11 +1,5 @@
 <script setup lang="ts">
-// 賞データの取得
-type prize = {
-    id: number,
-    name: string,
-    photo_id: string,
-    account_name: string,
-}
+import { type prize } from '@/types/prize'
 const prizeMap = ref(new Map<number, prize>())
 const viewPrize = ref<prize>()
 let viewPrizeId = 0
@@ -79,6 +73,7 @@ const vote = (async () => {
         body: {
             table: "line-slideshow-dynamodb-contest-dev",
             prize_id: viewPrizeId,
+            prize_name: prizeMap.value.get(viewPrizeId)?.name,
             photo_id: selectedPhotoId,
             account_name: photoMap.value.get(selectedPhotoId)?.poster
         }

@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@aws-sdk/lib-dynamodb": "^3.445.0",
+    "animate.css": "^4.1.1",
     "aws-sdk": "^2.1490.0",
     "uuid": "^9.0.1"
   }
