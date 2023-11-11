@@ -17,6 +17,9 @@ export default defineEventHandler(async (event) => {
             "prize_id": {
                 "N": body.prize_id.toString() as string
             },
+            "prize_name": {
+                "S": body.prize_name as string
+            },
             "photo_id": {
                 "S": body.photo_id as string
             },

@@ -79,6 +79,7 @@ const vote = (async () => {
         body: {
             table: "line-slideshow-dynamodb-contest-dev",
             prize_id: viewPrizeId,
+            prize_name: prizeMap.value.get(viewPrizeId)?.name,
             photo_id: selectedPhotoId,
             account_name: photoMap.value.get(selectedPhotoId)?.poster
         }
