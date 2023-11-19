@@ -86,13 +86,6 @@ const vote = (async () => {
     isSelected.value = false
 })
 
-// photoMap.value.forEach(async (value, key) => {
-//     const { data } = await useLazyFetch('/api/getS3file', {
-//         query: { bucket: "line-slideshow-s3-dev", filepath: `tmb/${value.file}`, file: `public/img/${value.file}` },
-//     })
-
-// })
-
 </script>
 
 <template>

@@ -1,4 +1,17 @@
 <script setup lang="ts">
+
+const photoNum = ref(0)
+const { data } = await useFetch('/api/getS3fileList', {
+    query: {
+        bucket: "line-slideshow-s3-dev",
+        prefix: "img/",
+    }
+})
+if (data.value == null) {
+    throw new Error("data is null")
+}
+photoNum.value = data.value.KeyCount
+
 </script>
 
 <template>
@@ -10,6 +23,9 @@
         </div>
         <div class="title">
             <p>フォトコンシステム</p>
+        </div>
+        <div id="tips">
+            <p>ただいまの投稿枚数：{{ photoNum }}</p>
         </div>
     </header>
     <main>
@@ -67,6 +83,13 @@ header .title {
     font-weight: bold;
     font-style: italic;
     -webkit-text-stroke: 1px #000;
+}
+
+#tips {
+    position: absolute;
+    top: 0;
+    left: 10px;
+    color: white;
 }
 
 /* .title {
