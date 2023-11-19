@@ -16,8 +16,12 @@ const makeSlideshow = async () => {
     if (JSON.parse(response.value.result)["statusCode"] !== 200) {
         throw response.value.logs;
     }
-    videoLink.value = runtimeConfig.public.video_url
-        + JSON.parse(response.value.result)["body"]["video_name"];
+    // videoLink.value = runtimeConfig.public.video_url
+    // + JSON.parse(response.value.result)["body"]["video_name"];
+    if (!response.value.videoUrl) {
+        throw Error("videoUrl is undefined");
+    }
+    videoLink.value = response.value.videoUrl;
     haveResponse.value = true;
     isMaking.value = false;
 };
