@@ -33,11 +33,13 @@
             </NuxtLink>
         </div>
         <div>
-            <button class="right">
-                スライドショー作成
-                <br />
-                <span class="material-symbols-outlined"> slideshow </span>
-            </button>
+            <NuxtLink to="/slideshow" class="link">
+                <button class="right">
+                    スライドショー作成
+                    <br />
+                    <span class="material-symbols-outlined"> slideshow </span>
+                </button>
+            </NuxtLink>
         </div>
     </main>
 </template>
