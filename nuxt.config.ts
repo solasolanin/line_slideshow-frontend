@@ -1,3 +1,4 @@
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
@@ -5,8 +6,25 @@ export default defineNuxtConfig({
     public: {
       env: "",
       video_url: "",
-      thumbnail_url: "",
-      origin_img_url: ""
+      bucket_url: "",
     }
+  },
+  build: {
+    transpile: ['vuetify'],
+  },
+  modules: [
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    },
+  ],
+  vite: {
+    vue: {
+      template: {
+        transformAssetUrls,
+      },
+    },
   },
 })

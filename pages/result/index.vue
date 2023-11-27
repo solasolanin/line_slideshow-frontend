@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { type prize } from '@/types/prize'
+const runtimeConfig = useRuntimeConfig();
 const viewId = ref<number>(0)
 const prizeMap = new Map<number, prize>()
 const { data: prizeDatad } = await useFetch('/api/getTableScan', {
-    query: { table: "line-slideshow-dynamodb-contest-dev" }
+    query: { table: `line-slideshow-dynamodb-contest-${runtimeConfig.public.env}` }
 })
 if (prizeDatad.value?.Items) {
     prizeDatad.value?.Items.forEach((item: any) => {

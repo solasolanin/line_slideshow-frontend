@@ -1,4 +1,3 @@
-import aws from 'aws-sdk'
 import { DynamoDB as DynamoDBClient } from '@aws-sdk/client-dynamodb'
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb'
 
@@ -20,13 +19,6 @@ interface TableSchema {
  */
 export default defineEventHandler(async (event) => {
     const query = getQuery(event)
-    aws.config.update({
-        region: process.env.ENV_AWS_DEFAULT_REGION,
-        accessKeyId: process.env.ENV_AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.ENV_AWS_SECRET_ACCESS_KEY,
-    })
-
-    // const ddb = new aws.DynamoDB()
     const ddb = new DynamoDBClient({
         region: process.env.ENV_AWS_DEFAULT_REGION,
         credentials: {

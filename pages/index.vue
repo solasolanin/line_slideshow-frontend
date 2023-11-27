@@ -1,9 +1,9 @@
 <script setup lang="ts">
-
+const runtimeConfig = useRuntimeConfig();
 const photoNum = ref(0)
 const { data } = await useFetch('/api/getS3fileList', {
     query: {
-        bucket: "line-slideshow-s3-dev",
+        bucket: `line-slideshow-open-s3-${runtimeConfig.public.env}`,
         prefix: "img/",
     }
 })
