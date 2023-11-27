@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { type prize } from '@/types/prize'
+const runtimeConfig = useRuntimeConfig();
 const prizeMap = ref(new Map<number, prize>())
 const viewPrize = ref<prize>()
 let viewPrizeId = 0
 const { data: prizeDatad } = await useFetch('/api/getTableScan', {
-    query: { table: "line-slideshow-dynamodb-contest-dev" }
+    query: { table: `line-slideshow-dynamodb-contest-${runtimeConfig.public.env}` }
 })
 if (prizeDatad.value?.Items) {
     prizeDatad.value?.Items.forEach((item: any) => {
@@ -29,13 +30,14 @@ type Photo = {
     poster: string,
 }
 // const thumbUrlPrefix = process.env.THUMBNAIL_URL
-const thumbUrlPrefix = "https://dipq407x26ji4.cloudfront.net/tmb/"
+const thumbUrlPrefix = `${runtimeConfig.public.bucket_url}tmb/`
 // const originUrlPrefix = process.env.ORIGIN_IMG_URL
-const originUrlPrefix = "https://dipq407x26ji4.cloudfront.net/img/"
+const originUrlPrefix = `${runtimeConfig.public.bucket_url}img/`
 const photoMap = ref(new Map<string, Photo>())
 
 const colCount = 4
 const rowCount = computed((): number => {
+    console.log(photoMap.value.size)
     return Math.ceil(photoMap.value.size / colCount)
 })
 
@@ -43,7 +45,7 @@ const photoArray = computed((): Photo[] => {
     return [...photoMap.value.values()]
 })
 const { data, refresh } = await useFetch('/api/getTableScan', {
-    query: { table: "line-slideshow-dynamodb-dev" }
+    query: { table: `line-slideshow-dynamodb-${runtimeConfig.public.env}` }
 })
 
 if (data.value?.Items) {
@@ -71,7 +73,7 @@ const vote = (async () => {
     const { data: voted } = await useFetch('/api/postVote', {
         method: 'POST',
         body: {
-            table: "line-slideshow-dynamodb-contest-dev",
+            table: `line-slideshow-dynamodb-contest-${runtimeConfig.public.env}`,
             prize_id: viewPrizeId,
             prize_name: prizeMap.value.get(viewPrizeId)?.name,
             photo_id: selectedPhotoId,
@@ -85,13 +87,9 @@ const vote = (async () => {
     viewPrizeId--
     isSelected.value = false
 })
-
-// photoMap.value.forEach(async (value, key) => {
-//     const { data } = await useLazyFetch('/api/getS3file', {
-//         query: { bucket: "line-slideshow-s3-dev", filepath: `tmb/${value.file}`, file: `public/img/${value.file}` },
-//     })
-
-// })
+const viewPrizeName = computed((): string => {
+    return prizeMap.value.get(viewPrizeId)?.name ?? ''
+})
 
 </script>
 
@@ -102,31 +100,38 @@ const vote = (async () => {
     <hr>
     <main>
         <div id="description" v-if="viewPrizeId !== 0">
-            <h4>{{ prizeMap.get(viewPrizeId)?.name }}を選んでください</h4>
+            <h4>{{ viewPrizeName }}を選んでください</h4>
+            <!-- <h4>{{ prizeMap.get(viewPrizeId)?.name }}を選んでください</h4> -->
         </div>
-        <div v-if="rowCount === 0">データがありません</div>
+        <div v-if="photoArray.length === 0">データがありません</div>
         <div v-else>
-            <div class="row" v-for="row in rowCount">
-                <div class="col" v-for="col in colCount">
-                    <img class="thumbnail" @click="showPreview(photoArray[colCount * row - colCount + col].id)"
-                        :src="photoArray[colCount * row - colCount + col].path"
-                        v-if="photoArray.length !== 0 && photoArray[colCount * row - colCount + col]">
-                    <p v-if="photoArray.length !== 0 && photoArray[colCount * row - colCount + col]">
-                        {{ photoArray[colCount * row - colCount + col].poster }}
-                    </p>
-                </div>
-            </div>
+            <v-row>
+                <v-col v-for="i in photoArray.length" :key="i" cols="3" class="card.flex">
+                    <v-card>
+                        <v-card-item>
+                            <v-img :src="photoArray[i - 1].path" height="200px" @click="showPreview(photoArray[i - 1].id)">
+                            </v-img>
+
+                        </v-card-item>
+                        <v-card-title>{{ photoArray[i - 1].poster }}</v-card-title>
+                    </v-card>
+                </v-col>
+            </v-row>
         </div>
         <!-- サムネイル押下で元画像表示 -->
-        <section class="preview" v-if="isSelected">
-            <div id="preview-area">
-                <img id="preview" :src="previewPath">
-                <div>
-                    <button v-on:click="isSelected = false">キャンセル</button>
-                    <button v-on:click="vote()">決定</button>
-                </div>
-            </div>
-        </section>
+        <v-dialog theme="dark" v-model="isSelected">
+            <v-card>
+                <v-card-title>{{ viewPrizeName }}はこれでいいですか？</v-card-title>
+                <v-card-item>
+                    <v-img :src="previewPath" height="700"></v-img>
+                </v-card-item>
+                <v-card-actions>
+                    <v-btn variant="text" v-on:click="isSelected = false">キャンセル</v-btn>
+                    <v-spacer></v-spacer>
+                    <v-btn variant="outlined" v-on:click="vote()">決定</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
     </main>
 </template>
 
@@ -135,6 +140,8 @@ main {
     position: relative;
     height: 100vh;
     overflow: scroll;
+    /* background-color: black; */
+    padding: 0 8px;
 }
 
 #description {
@@ -154,38 +161,5 @@ main {
 
 .thumbnail {
     width: calc(100vw/v-bind(colCount) - 8px);
-}
-
-section {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.8);
-    /* margin-top: -85.5px; */
-    display: flex;
-    /* place-items: center; */
-    align-items: center;
-    justify-content: center;
-    overflow: scroll;
-    top: 0;
-}
-
-section img {
-    max-width: 70%;
-    max-height: 50%;
-}
-
-#preview-area {
-    text-align: center;
-}
-
-section button {
-    margin: 8px;
-    padding: 8px;
-    width: 20vw;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
 }
 </style>

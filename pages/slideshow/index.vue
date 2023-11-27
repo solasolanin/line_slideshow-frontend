@@ -14,10 +14,14 @@ const makeSlideshow = async () => {
     }
     console.log(response.value.result)
     if (JSON.parse(response.value.result)["statusCode"] !== 200) {
-        throw response.value.logs;
+        throw Error("statusCode is not 200");
     }
-    videoLink.value = runtimeConfig.public.video_url
-        + JSON.parse(response.value.result)["body"]["video_name"];
+    // videoLink.value = runtimeConfig.public.video_url
+    // + JSON.parse(response.value.result)["body"]["video_name"];
+    if (!response.value.videoUrl) {
+        throw Error("videoUrl is undefined");
+    }
+    videoLink.value = response.value.videoUrl;
     haveResponse.value = true;
     isMaking.value = false;
 };
@@ -31,7 +35,7 @@ const makeSlideshow = async () => {
     <main>
         <div v-if="!isMaking">
             <button v-on:click="makeSlideshow">
-                ここを押してスライドショー作成実行{{ runtimeConfig.public.env }}
+                ここを押してスライドショー作成実行
             </button>
         </div>
         <!-- <div id="loading"> -->
