@@ -29,9 +29,7 @@ type Photo = {
     path: string,
     poster: string,
 }
-// const thumbUrlPrefix = process.env.THUMBNAIL_URL
 const thumbUrlPrefix = `${runtimeConfig.public.bucket_url}tmb/`
-// const originUrlPrefix = process.env.ORIGIN_IMG_URL
 const originUrlPrefix = `${runtimeConfig.public.bucket_url}img/`
 const photoMap = ref(new Map<string, Photo>())
 
