@@ -1,15 +1,34 @@
 service: line-slideshow-frontend
-frameworkVersion: '3'
+frameworkVersion: "3"
+params:
+  dev:
+    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-frontend-dev.s3-ap-northeast-1.amazonaws.com
+    NUXT_PUBLIC_ENV: dev
+    PRIVATE_BUCKET: line-slideshow-s3-dev
+  stg:
+    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-frontend-stg.s3-ap-northeast-1.amazonaws.com
+    NUXT_PUBLIC_ENV: stg
+    PRIVATE_BUCKET: line-slideshow-s3-stg
+  prod:
+    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-frontend-prod.s3-ap-northeast-1.amazonaws.com
+    NUXT_PUBLIC_ENV: prod
+    PRIVATE_BUCKET: line-slideshow-s3-prod
 provider:
   name: aws
-  stage: dev
+  stage: ${opt:stage}
   region: ap-northeast-1
   runtime: nodejs20.x
+  timeout: 600
   environment:
-    NUXT_PUBLIC_ENV: dev
+    ENV_AWS_ACCESS_KEY_ID: ${param:ENV_AWS_ACCESS_KEY_ID}
+    ENV_AWS_SECRET_ACCESS_KEY: ${param:ENV_AWS_SECRET_ACCESS_KEY}
+    ENV_AWS_DEFAULT_REGION: ap-northeast-1
+    NUXT_PUBLIC_BUCKET_URL: ${param:NUXT_PUBLIC_BUCKET_URL}
+    NUXT_PUBLIC_ENV: ${param:NUXT_PUBLIC_ENV}
+    PRIVATE_BUCKET: ${param:PRIVATE_BUCKET}
 package:
   patterns:
-    - '!**'
+    - "!**"
     - .output/**
 functions:
   NuxtSsrEngine:
