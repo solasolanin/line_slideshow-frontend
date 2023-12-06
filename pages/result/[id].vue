@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import 'animate.css'
 import { type prize } from '@/types/prize'
+const runtimeConfig = useRuntimeConfig();
 const prizeMap = useState<Map<number, prize>>("prizeMap")
 const viewId = useState<number>("viewId")
 const route = useRoute();
 const prizeId = Number(route.params.id);
 const introVisible = ref(true);
 const photoUrl = computed(() => {
-    return `https://dipq407x26ji4.cloudfront.net/img/${prizeMap.value.get(prizeId)?.photo_id}.jpeg`
+    return `${runtimeConfig.public.bucket_url}img/${prizeMap.value.get(prizeId)?.photo_id}.jpeg`
 })
 
 setTimeout(() => {
@@ -29,6 +30,11 @@ console.log("prizeMap", prizeMap.value)
         <NuxtLink v-bind:to="{ name: 'result-id', params: { id: viewId } }" v-if="viewId !== 0">
             <button class="middle">
                 次の発表
+            </button>
+        </NuxtLink>
+        <NuxtLink v-bind:to="{ name: 'result' }" v-else>
+            <button class="middle">
+                トップに戻る
             </button>
         </NuxtLink>
     </main>
