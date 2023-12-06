@@ -2,15 +2,15 @@ service: line-slideshow-frontend
 frameworkVersion: "3"
 params:
   dev:
-    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-frontend-dev.s3-ap-northeast-1.amazonaws.com
+    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-open-s3-dev.s3-ap-northeast-1.amazonaws.com/
     NUXT_PUBLIC_ENV: dev
     PRIVATE_BUCKET: line-slideshow-s3-dev
   stg:
-    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-frontend-stg.s3-ap-northeast-1.amazonaws.com
+    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-open-s3-stg.s3-ap-northeast-1.amazonaws.com/
     NUXT_PUBLIC_ENV: stg
     PRIVATE_BUCKET: line-slideshow-s3-stg
   prod:
-    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-frontend-prod.s3-ap-northeast-1.amazonaws.com
+    NUXT_PUBLIC_BUCKET_URL: https://line-slideshow-open-s3-prod.s3-ap-northeast-1.amazonaws.com/
     NUXT_PUBLIC_ENV: prod
     PRIVATE_BUCKET: line-slideshow-s3-prod
 provider:

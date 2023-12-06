@@ -3,7 +3,7 @@ import { type prize } from '@/types/prize'
 const runtimeConfig = useRuntimeConfig();
 const prizeMap = ref(new Map<number, prize>())
 const viewPrize = ref<prize>()
-let viewPrizeId = 0
+const viewPrizeId = ref(0)
 const { data: prizeDatad } = await useFetch('/api/getTableScan', {
     query: { table: `line-slideshow-dynamodb-contest-${runtimeConfig.public.env}` }
 })
@@ -18,8 +18,8 @@ if (prizeDatad.value?.Items) {
                 account_name: item.account_name as string,
             })
     })
-    viewPrize.value = prizeMap.value.get(viewPrizeId)
-    viewPrizeId = prizeMap.value.size
+    viewPrize.value = prizeMap.value.get(viewPrizeId.value)
+    viewPrizeId.value = prizeMap.value.size
 }
 
 // Photoデータの取得
@@ -73,20 +73,20 @@ const vote = (async () => {
         body: {
             table: `line-slideshow-dynamodb-contest-${runtimeConfig.public.env}`,
             prize_id: viewPrizeId,
-            prize_name: prizeMap.value.get(viewPrizeId)?.name,
+            prize_name: prizeMap.value.get(viewPrizeId.value)?.name,
             photo_id: selectedPhotoId,
             account_name: photoMap.value.get(selectedPhotoId)?.poster
         }
     })
-    console.log(voted.value)
-    if (viewPrizeId === 1) {
+    console.log(prizeMap.value)
+    if (viewPrizeId.value === 1) {
         return navigateTo('/vote/done')
     }
-    viewPrizeId--
+    viewPrizeId.value--
     isSelected.value = false
 })
 const viewPrizeName = computed((): string => {
-    return prizeMap.value.get(viewPrizeId)?.name ?? ''
+    return prizeMap.value.get(viewPrizeId.value)?.name ?? ''
 })
 
 </script>
